@@ -2,6 +2,10 @@ server:
   port: 6061
 
 spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: order-service
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,3 +14,8 @@ spring:
     url: jdbc:mysql://localhost:3306/order_service
     username: root
     password: ashutosh
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

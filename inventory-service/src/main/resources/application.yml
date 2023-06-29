@@ -1,7 +1,9 @@
 server:
-  port: 6062
+  port: 0
 
 spring:
+  application:
+    name: inventory-service
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,3 +12,8 @@ spring:
     url: jdbc:mysql://localhost:3306/inventory_service
     username: root
     password: ashutosh
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

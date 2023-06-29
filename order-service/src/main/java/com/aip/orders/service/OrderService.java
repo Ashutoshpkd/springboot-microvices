@@ -6,10 +6,9 @@ import com.aip.orders.dto.*;
 import com.aip.orders.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.client.reactive.ClientHttpRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -17,15 +16,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class OrderService {
 
-    private final WebClient webClient;
-    private final OrderRepository repository;
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
+    @Autowired
+    private OrderRepository repository;
 
     public OrderResponseDto placeOrder(OrderRequestDto orderRequest) {
+
         List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItems()
                 .stream()
                 .map(this::mapToOrderLineItems)
@@ -39,8 +41,8 @@ public class OrderService {
                         .build())
                 .collect(Collectors.toList());
 
-        InventoryResponseDto inventory = webClient.put()
-                .uri("http://localhost:6062/api/inventory")
+        InventoryResponseDto inventory = webClientBuilder.build().put()
+                .uri("http://inventory-service/api/inventory")
                 .bodyValue(orderItems)
                 .retrieve()
                 .bodyToMono(InventoryResponseDto.class)

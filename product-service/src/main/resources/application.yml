@@ -1,11 +1,17 @@
 spring:
+  application:
+    name: product-service
   profiles:
     active: local
 
 server:
-  port: 6060
+  port: 0
 
 ---
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
 
 spring:
   config:
